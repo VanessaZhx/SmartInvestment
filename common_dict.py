@@ -27,6 +27,7 @@ industryCodeToName = {
     '801780': '银行',
     '801790': '非银金融',
     '801230': '综合',
+    '000000': '非H股',
 }
 
 zjhIndustryNameToCode = {
