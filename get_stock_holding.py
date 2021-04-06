@@ -115,6 +115,11 @@ if __name__ == '__main__':
         print(f'正在获取 {fundCode} 的持仓信息......')
         # 获取持仓股票代码，持仓比例
         invCodes, invPercentages = get_invest_position(fundCode)
+        if not invCodes:
+            cnt += 1
+            print(f'基金 {fundCode} 暂无持仓信息......(进度{cnt}/{len(fundCodes)})\n')
+            continue
+
         invCapStocks = []
         invIndustries = []
         # 获取股票股本，股票行业类别
