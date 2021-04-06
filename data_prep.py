@@ -27,7 +27,7 @@ def set_fund_data(mode, source):
         row = []
         for col in common_dict.fundDataColumn:
             if col == 'fund_code':
-                row.append(fundCode)
+                row.append(str(fundCode))
             else:
                 invests = invData[invData['invIndustry'] == col]
 
@@ -58,9 +58,9 @@ def get_fund_data(file):
     :return:
         基金信息结构
     """
-    fund_data = pd.read_csv(file)
+    fund_data = pd.read_csv(file, dtype = {'fund_code': object})
     return fund_data
 
 
 if __name__ == '__main__':
-    set_fund_data(0, 'ZJH')
+    set_fund_data(1, 'ZJH')
