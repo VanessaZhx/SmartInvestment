@@ -1,5 +1,15 @@
 import pandas as pd
 import common_dict
+import os
+
+
+def get_files(root_dir):
+    list_dirs = os.walk(root_dir)
+    file_list = []
+    for root, dirs, files in list_dirs:
+        for f in files:
+            file_list.append(f)
+    return file_list
 
 
 def set_fund_data(mode, source):
@@ -14,16 +24,15 @@ def set_fund_data(mode, source):
         -
     """
     # 读入基金代码数据
-    print("正在读入数据......")
-    with open('fund_code.txt', 'r') as f:
-        line = f.readline().strip()
-        fundCodes = line.split(" ")
+    print("正在获取列表文件......")
+    files = get_files('invest_info')
 
-    print("读入成功，正在构建数据......")
+    print("文件列表获取成功，正在构建数据......")
     fundMap = []
-    for fundCode in fundCodes:
-        invData = pd.read_csv(f'invest_info/invest_info_{fundCode}.csv')
 
+    for file in files:
+        invData = pd.read_csv(f'invest_info/'+ file)
+        fundCode = file[12:18]
         row = []
         for col in common_dict.fundDataColumn:
             if col == 'fund_code':
@@ -63,4 +72,4 @@ def get_fund_data(file):
 
 
 if __name__ == '__main__':
-    set_fund_data(1, 'ZJH')
+    set_fund_data(0, 'ZJH')
