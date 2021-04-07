@@ -114,12 +114,11 @@ def get_industry_sw(inv_code):
     :return:
         特定股票行业信息（申万分类码）
     """
-    code = normalize_code(inv_code)
-
     # 若为港股，标记为非H股
-    if len(code) == 5:
+    if inv_code[0] == '/':
         industry = '000000'
     else:
+        code = normalize_code(inv_code)
         info = get_industry(code, date=None)
         industry = info[code]['sw_l1']['industry_code']
     return industry
