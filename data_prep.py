@@ -25,19 +25,29 @@ def set_fund_data(mode, source):
     """
     # 读入基金代码数据
     print("正在获取列表文件......")
-    files = get_files('invest_info')
+    if source == 'ZJH':
+        files = get_files('invest_info')
+    else:
+        files = get_files('invest_info_sw')
 
     print("文件列表获取成功，正在构建数据......")
     fundMap = []
-
+    fundDataColumn = []
     for file in files:
-        invData = pd.read_csv(f'invest_info/'+ file)
+        if source == 'ZJH':
+            invData = pd.read_csv(f'invest_info/' + file)
+            fundDataColumn = common_dict.fundDataColumnZJH
+        else:
+            invData = pd.read_csv(f'invest_info_sw/' + file)
+            fundDataColumn = common_dict.fundDataColumnSW
         fundCode = file[12:18]
         row = []
-        for col in common_dict.fundDataColumn:
+
+        for col in fundDataColumn:
             if col == 'fund_code':
                 row.append(str(fundCode))
             else:
+                print(invData['invIndustry'] == col)
                 invests = invData[invData['invIndustry'] == col]
 
                 if invests.empty:
@@ -51,7 +61,7 @@ def set_fund_data(mode, source):
                     row.append(multi)
         fundMap.append(row)
     print("构建成功，正在写入数据......")
-    fundMap = pd.DataFrame(fundMap, columns=common_dict.fundDataColumn)
+    fundMap = pd.DataFrame(fundMap, columns=fundDataColumn)
 
     file_name = 'fund_map_' + str(mode) + '_' + source + '.csv'
     fundMap.to_csv(file_name, index=False, sep=',')
@@ -72,4 +82,4 @@ def get_fund_data(file):
 
 
 if __name__ == '__main__':
-    set_fund_data(0, 'ZJH')
+    set_fund_data(0, 'SW')
