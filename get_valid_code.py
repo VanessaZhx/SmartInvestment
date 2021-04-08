@@ -1,4 +1,4 @@
-from fund_info_utils import *
+from utils_fund_info import *
 
 
 def get_valid_code():
@@ -16,7 +16,7 @@ def get_valid_code():
         elif datetime.datetime.strptime(str(estabDate), '%Y-%m-%d') > fundDateLim:
             codes.remove(code)
 
-    fund_code = open("fund_code.txt", 'w+')
+    fund_code = open("src/fund_code.txt", 'w+')
     for i in fund_code:
         print(i, end=" ", file=fund_code)
     fund_code.close()

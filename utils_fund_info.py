@@ -3,6 +3,7 @@ import json
 import re
 import execjs
 import requests
+import pandas as pd
 
 
 def get_all_equity_code():
@@ -130,7 +131,8 @@ def get_fund_equity_return(fund_code, start_date, end_date):
     trend = []
     for data in trend_data:
         if int(start_date) <= data['x'] / 1000 <= int(end_date):
-            info = {'x':data['x'], 'y': data['y']}
+            info = [data['x'], data['y']]
+            # info = pd.DataFrame(info)
             trend.append(info)
 
     return trend

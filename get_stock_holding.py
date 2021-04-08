@@ -1,6 +1,6 @@
 import common_dict
-from fund_info_utils import get_invest_position
-from stock_info_utils import *
+from utils_fund_info import get_invest_position
+from utils_stock_info import *
 
 
 def get_stock_holding_zjh():
@@ -8,7 +8,7 @@ def get_stock_holding_zjh():
     获取证监会分类下的持股信息
     """
     # 读入基金代码数据
-    with open('fund_code.txt', 'r') as f:
+    with open('src/fund_code.txt', 'r') as f:
         line = f.readline().strip()
         fundCodes = line.split(" ")
 
@@ -40,7 +40,7 @@ def get_stock_holding_zjh():
         })
         # 添加到 csv 表格中
         cnt += 1
-        df.to_csv(f'invest_info/invest_info_{fundCode}.csv', index=False, sep=',')
+        df.to_csv(f'src/invest_info/invest_info_{fundCode}.csv', index=False, sep=',')
         print(f'{fundCode} 的持仓信息获取成功(进度{cnt}/{len(fundCodes)})\n')
 
 
@@ -49,7 +49,7 @@ def get_stock_holding_sw():
     获取申万分类下的持股信息
     """
     # 读入基金代码数据
-    with open('fund_code.txt', 'r') as f:
+    with open('src/fund_code.txt', 'r') as f:
         line = f.readline().strip()
         fundCodes = line.split(" ")
 
@@ -81,7 +81,7 @@ def get_stock_holding_sw():
         })
         # 添加到 csv 表格中
         cnt += 1
-        df.to_csv(f'invest_info_sw/invest_info_{fundCode}.csv', index=False, sep=',')
+        df.to_csv(f'src/invest_info_sw/invest_info_{fundCode}.csv', index=False, sep=',')
         print(f'{fundCode} 的持仓信息获取成功(进度{cnt}/{len(fundCodes)})\n')
 
 
