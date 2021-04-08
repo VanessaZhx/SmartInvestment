@@ -1,6 +1,11 @@
+import datetime
+import time
+
 import pandas as pd
 import common_dict
 import os
+
+from utils_fund_info import get_fund_equity_return
 
 
 def get_files(root_dir):
@@ -26,19 +31,19 @@ def set_fund_data(mode, source):
     # 读入基金代码数据
     print("正在获取列表文件......")
     if source == 'ZJH':
-        files = get_files('invest_info')
+        files = get_files('src/invest_info')
     else:
-        files = get_files('invest_info_sw')
+        files = get_files('src/invest_info_sw')
 
     print("文件列表获取成功，正在构建数据......")
     fundMap = []
     fundDataColumn = []
     for file in files:
         if source == 'ZJH':
-            invData = pd.read_csv(f'invest_info/' + file)
+            invData = pd.read_csv(f'src/invest_info/' + file)
             fundDataColumn = common_dict.fundDataColumnZJH
         else:
-            invData = pd.read_csv(f'invest_info_sw/' + file)
+            invData = pd.read_csv(f'src/invest_info_sw/' + file)
             fundDataColumn = common_dict.fundDataColumnSW
         fundCode = file[12:18]
         row = []
@@ -80,5 +85,40 @@ def get_fund_data(file):
     return fund_data
 
 
+def set_fund_trend(source, start_date, end_date):
+    # 读入基金代码数据
+    print("正在获取列表文件......")
+    if source == 'ZJH':
+        files = get_files('src/invest_info')
+    else:
+        files = get_files('src/invest_info_sw')
+
+    # 遍历文件，获取模型中用到数据近一年的净值信息
+    trends = pd.DataFrame()
+    cnt = 0
+    for file in files:
+        fundCode = file[12:18]
+        daily_data = get_fund_equity_return(fundCode, start_date, end_date)
+        trend = pd.DataFrame({'code': str(fundCode)}, index=[0])
+        for data in daily_data:
+            time_local = time.localtime(data[0] / 1000)
+            dt = time.strftime("%Y-%m-%d", time_local)
+            trend[dt] = data[1]
+        if trends.empty:
+            trends = trend
+        else:
+            trends = pd.concat([trends, trend], ignore_index=True)
+        cnt += 1
+        print(f'{fundCode} 的净值信息获取成功(进度{cnt}/{len(files)})')
+
+    # 输出结果
+    trends.to_csv(f'src/fund_trend_{source}.csv', index=False, sep=',')
+    print(f"数据已写入到 src/fund_trend_{source}.csv' 中，数据预览如下")
+    print(trends)
+
+
 if __name__ == '__main__':
-    set_fund_data(1, 'SW')
+    now = datetime.datetime.now().timestamp()
+    dateLim = (datetime.datetime.now() - datetime.timedelta(days=365)).timestamp()
+    set_fund_trend('ZJH', dateLim, now)
+    # set_fund_data(1, 'SW')
