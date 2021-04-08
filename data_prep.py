@@ -47,8 +47,7 @@ def set_fund_data(mode, source):
             if col == 'fund_code':
                 row.append(str(fundCode))
             else:
-                print(invData['invIndustry'] == col)
-                invests = invData[invData['invIndustry'] == col]
+                invests = invData[invData['invIndustry'] == int(col)]
 
                 if invests.empty:
                     row.append(0)
@@ -82,4 +81,4 @@ def get_fund_data(file):
 
 
 if __name__ == '__main__':
-    set_fund_data(0, 'SW')
+    set_fund_data(1, 'SW')

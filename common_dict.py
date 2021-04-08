@@ -1,4 +1,4 @@
-industryCodeToName = {
+swIndustryCodeToName = {
     '801020': '采掘',
     '801030': '化工',
     '801040': '钢铁',
