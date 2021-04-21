@@ -4,6 +4,8 @@ import re
 import execjs
 import requests
 import pandas as pd
+from jqdatasdk import *
+auth('13891981217','981217')
 
 
 def get_all_equity_code():
@@ -138,6 +140,22 @@ def get_fund_equity_return(fund_code, start_date, end_date):
     return trend
 
 
+def get_fund_equity_return_joinquant(fund_code, start_date, end_date):
+    """
+    获取特定基金在时间范围内的基金净值
+
+    :param:
+        fund_code:   基金代码
+        start_date:  起始时间
+        end_date：   终止时间
+    :return:
+         list(dict{x:毫秒时间戳, y:基金净值})
+    """
+    # trend = get_extras('unit_net_value', normalize_code(fund_code), start_date=start_date, end_date=end_date,df=False)
+    trend = get_bars(normalize_code(fund_code), 500, unit='1d', fields=['open'])
+    return trend
+
+
 def get_invest_position(fund_code):
     """
     获取特定基金的持仓股票代码与持仓占比
@@ -170,4 +188,6 @@ def get_invest_position(fund_code):
 if __name__ == '__main__':
     now = datetime.datetime.now().timestamp()
     dateLim = (datetime.datetime.now() - datetime.timedelta(days=365)).timestamp()
-    print(get_fund_equity_return('001028', dateLim, now))
+    print(get_fund_equity_return('000001', dateLim, now))
+    # a = get_fund_equity_return_joinquant('000001', dateLim, now)
+    # print(a)

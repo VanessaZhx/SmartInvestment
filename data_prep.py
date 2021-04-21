@@ -98,7 +98,8 @@ def set_fund_trend(source, start_date, end_date):
     cnt = 0
     for file in files:
         fundCode = file[12:18]
-        daily_data = get_fund_equity_return(fundCode, start_date, end_date)
+        daily_data = get_fund_equity_return_joinquant(fundCode, start_date, end_date)
+        # daily_data = get_fund_equity_return(fundCode, start_date, end_date)
         trend = pd.DataFrame({'code': str(fundCode)}, index=[0])
         for data in daily_data:
             time_local = time.localtime(data[0] / 1000)
